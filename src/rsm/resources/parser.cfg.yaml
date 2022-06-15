@@ -1,0 +1,55 @@
+core_fields:
+  # these are only extracted from column A up to the first monthly_observation_sets span
+  # value is dict field and column in db
+  Caseload: Caseload
+  Caseload Size (Active): Caseload_Size
+  Days Since Last Reading: Days Since_Last_Reading
+monthly_observation_sets:
+  spans_expected: 4
+  span_used_idx: 1
+  date_parse: "%B %Y"
+  # datetime.strptime
+  transform_csv: "%b-%y"
+  # "^" syntax (uppercase) may not work if not add a function to detect it:
+  # https://stackoverflow.com/a/50994363
+  transform_sql: "%^B %Y"
+monthly_observations:
+  # only extracted within the "span_used_idx" (zero based) range
+  # scans the whole range, capturing "unknown" elements for warnings
+  # value is dict field and column in db
+  BP: BP
+  Pulse: Pulse
+  O2: O2
+  Temp: Temp
+  NEWS: NEWS
+  NEWS2 (0-4): NEWS2(0-4)
+  NEWS2 (5-6): NEWS2(5-6)
+  NEWS2 (7+): NEWS2(7+)
+  NEWS2 (Total): NEWS2
+  Photos: Photos
+  ECG: ECG
+  Stetho scope: Stethoscope
+  Clients w/ Readings: Clients_with_Readings
+output_order:
+  - activity_month
+  - Caseload
+  - Caseload_Size
+  - Days Since_Last_Reading
+  - BP
+  - Pulse
+  - O2
+  - Temp
+  - NEWS
+  - NEWS2(0-4)
+  - NEWS2(5-6)
+  - NEWS2(7+)
+  - NEWS2
+  - Photos
+  - ECG
+  - Stethoscope
+  - Clients_with_Readings
+connection:
+  host: "***.***.***.***"
+  port: "****"
+  user: "*"
+  db: "*"

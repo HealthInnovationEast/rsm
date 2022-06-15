@@ -1,0 +1,1 @@
+LOG_LEVELS = ("WARNING", "INFO", "DEBUG")
