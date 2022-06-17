@@ -1,3 +1,4 @@
+"""CLI interface."""
 import logging
 import sys
 from functools import wraps
@@ -23,6 +24,8 @@ optgroup_debug = OptionGroup("\nDebug options", help="Options specific to troubl
 
 
 def debug_opts(f):
+    """Debug option declaration."""
+
     @optgroup_debug.option(
         "-l",
         "--loglevel",
@@ -40,6 +43,8 @@ def debug_opts(f):
 
 
 def parse_opts(f):
+    """Input option declaration."""
+
     @click.option(
         "-i",
         "--input",
@@ -62,6 +67,8 @@ def parse_opts(f):
 
 
 def output_opts(f):
+    """Output option declaration."""
+
     @optgroup_debug.option(
         "-o",
         "--output",
@@ -79,6 +86,7 @@ def output_opts(f):
 @click.group()
 @click.version_option(version())
 def cli():
+    """Click CLI response when no sub-command."""
     pass
 
 
@@ -86,9 +94,7 @@ def cli():
 @parse_opts
 @debug_opts
 def validate_xlsx(*args, **kwargs):
-    """
-    Validate the provided xlsx file vs yaml config.
-    """
+    """Validate the provided xlsx file vs yaml config."""
     rsm_main.validate(*args, **kwargs)
 
 
@@ -97,9 +103,7 @@ def validate_xlsx(*args, **kwargs):
 @output_opts
 @debug_opts
 def to_csv(*args, **kwargs):
-    """
-    Convert the provided xlsx file to csv using the yaml config.
-    """
+    """Convert the provided xlsx file to csv using the yaml config."""
     rsm_main.convert(*args, **kwargs)
 
 
@@ -108,8 +112,7 @@ def to_csv(*args, **kwargs):
 @output_opts
 @debug_opts
 def to_db(*args, **kwargs):
-    """
-    Convert the provided xlsx file to csv and load into database.
+    """Convert the provided xlsx file to csv and load into database.
 
     Requires "connection" section of `parser.cfg.yaml` to be completed, password will be requested interactively.
     """
@@ -119,7 +122,5 @@ def to_db(*args, **kwargs):
 @cli.command()
 @debug_opts
 def template_config(*args, **kwargs):
-    """
-    Dumps example yaml config file to stdout
-    """
+    """Dump example yaml config file to stdout."""
     rsm_main.template_config(*args, **kwargs)

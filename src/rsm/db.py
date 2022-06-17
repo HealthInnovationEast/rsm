@@ -1,10 +1,9 @@
+"""Database related functions."""
 import getpass
 import logging
 import sys
 from inspect import cleandoc
 from typing import Any
-from typing import Dict
-from typing import List
 
 import mysql.connector
 from mysql.connector.cursor import MySQLCursor
@@ -12,7 +11,15 @@ from mysql.connector.cursor import MySQLCursor
 # import MySQLdb
 
 
-def insert_stmnt(db: str):
+def insert_stmnt(db: str) -> str:
+    """Create insert statement for relevant db/schema.
+
+    Args:
+        db (str) : The database/schema name to target.
+
+    Returns:
+        str: Leading whitespace stripped SQL insert.
+    """
     stmnt = f"""
     insert into {db}.temp_whzan_monthly_data
     (activity_month,Caseload,Caseload_Size,Days_Since_Last_Reading,BP,Pulse,O2,Temp,NEWS,`NEWS2(0-4)`,`NEWS2(5-6)`,`NEWS2(7+)`,NEWS2,Photos,ECG,Stethoscope,Clients_with_Readings)
@@ -21,25 +28,54 @@ def insert_stmnt(db: str):
     return cleandoc(stmnt)
 
 
-def count_stmnt(db: str):
+def count_month_stmnt(db: str) -> str:
+    """Create count distinct records for month statement for relevant db/schema.
+
+    Args:
+        db (str): The database/schema name to target.
+
+    Returns:
+        str: Leading whitespace stripped SQL insert.
+    """
     stmnt = f"""
     select count(*) as curr_rows
     from (
         select distinct * from
-        temp_whzan_monthly_data
+        {db}.temp_whzan_monthly_data
         where activity_month = %(month)s
     ) x
     """
     return cleandoc(stmnt)
 
 
-def get_month_count(cursor: MySQLCursor, query: str, month: str):
+def get_month_count(cursor: MySQLCursor, query: str, month: str) -> int:
+    """Execute and get the unique count of records for the month.
+
+    Args:
+        cursor (MySQLCursor): Database cursor
+        query (str): query string
+        month (str): month, same as insert format
+
+    Returns:
+        int: count of unique records for the specified month
+    """
     cursor.execute(query, {"month": month})
     count = cursor.fetchone()[0]
     return count
 
 
-def upload(config: Dict[str, Any], db_rows: List[List[Any]]):
+def upload(config: dict[str, Any], db_rows: list[list[Any]]):
+    """Connect to database and insert records.
+
+    Requests password interactively, masked with no indication of keystrokes.
+
+    If insertion of rows results in no new unique rows the changes are aborted.
+    Approach is unusual as the target table has no unique constraints due to data issues.
+
+    Args:
+        config (dict[str, Any]): Config loaded into dict.
+        db_rows (list[list[Any]]): Rows to be loaded.
+    """
     host = config["connection"]["host"]
     port = config["connection"]["port"]
     db = config["connection"]["db"]
@@ -52,7 +88,7 @@ def upload(config: Dict[str, Any], db_rows: List[List[Any]]):
     pwd = getpass.getpass(prompt=">>>>> Please enter password for above DB: ", stream=None)
 
     sql_insert = insert_stmnt(db)
-    sql_count = count_stmnt(db)
+    sql_count = count_month_stmnt(db)
 
     logging.info("Connecting to DB")
     connection = mysql.connector.connect(user=user, password=pwd, host=host, port=int(port), database=db)
