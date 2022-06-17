@@ -33,11 +33,7 @@ def validate(input, config, loglevel) -> tuple[dict[str, Any], Worksheet, dateti
         loglevel (str) : see rsm.constants.LOG_LEVELS
 
     Returns:
-        Tuple containing -
-            dict[str, Any]: Config loaded into dict.
-            Worksheet: The excel sheet to process.
-            datetime: The date to record data against.
-            dict[str, int]: Column mappings kvp.
+        Config loaded into dict; Worksheet to process; Date to record data against; Column mappings kvp.
     """
     log_setup(loglevel)
     input = os.path.abspath(input)
@@ -57,15 +53,13 @@ def convert(input: str, config: str, output: str, loglevel: str) -> tuple[dict[s
     """Convert xlsx to csv format as described by config.
 
     Args:
-        input    (str) : Path to Input xlsx file
-        config   (str) : Path to config (None accepted)
-        output   (str) : Path to output csv (None accepted)
-        loglevel (str) : see rsm.constants.LOG_LEVELS
+        input: Path to Input xlsx file
+        config: Path to config (None accepted)
+        output: Path to output csv (None accepted)
+        loglevel: see rsm.constants.LOG_LEVELS
 
     Returns:
-        Tuple containing -
-            dict[str, Any]: Config loaded into dict.
-            list[list[Any]]: Data rows.
+        Config loaded into dict; Data rows.
     """
     yml_conf, ws, monthly_dt, col_map = validate(input, config, loglevel)
 
@@ -105,10 +99,10 @@ def convert_to_db(input: str, config: str, output: str, loglevel: str):
     """Convert xlsx to csv format and upload to database.
 
     Args:
-        input    (str) : Path to Input xlsx file
-        config   (str) : Path to config (None accepted)
-        output   (str) : Path to output csv (None accepted)
-        loglevel (str) : see rsm.constants.LOG_LEVELS
+        input: Path to Input xlsx file
+        config: Path to config (None accepted)
+        output: Path to output csv (None accepted)
+        loglevel: see rsm.constants.LOG_LEVELS
     """
     yml_conf, db_rows = convert(input, config, output, loglevel)
     rsm_db.upload(yml_conf, db_rows)

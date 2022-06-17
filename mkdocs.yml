@@ -1,0 +1,10 @@
+site_name: rsm - Remote Site Monitoring
+
+theme:
+  name: "material"
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - Home: index.md

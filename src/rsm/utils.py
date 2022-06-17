@@ -8,11 +8,11 @@ from pkg_resources import resource_string
 MY_VERSION = require(__name__.split(".")[0])[0].version
 
 
-def version():
+def version() -> str:
     """Access to version for comand line.
 
     Returns:
-        str: Version string.
+        Version string.
     """
     return MY_VERSION
 
@@ -28,10 +28,10 @@ def parser_cfg(user_defined: str) -> str:
     Loads provided file or the default config file.
 
     Args:
-        user_defined (str): Path to user defined config file (optional)
+        user_defined: Path to user defined config file (optional)
 
     Returns:
-        str: File or internal resource loaded into string.
+        File or internal resource loaded into string.
     """
     if user_defined:
         logging.debug("Loading parser config from user defined file")
@@ -49,11 +49,11 @@ def fmt_date(fmt: str, value: datetime) -> str:
     Needed to support ^ to force upper on month which isn't native on windows.
 
     Args:
-        fmt (str): A POSIX date format.
-        value (datetime): Date to be formated.
+        fmt: A POSIX date format.
+        value: Date to be formated.
 
     Returns:
-        str: Formatted date.
+        Formatted date.
     """
     if "^" in fmt:
         fmt = fmt.replace("^", "")

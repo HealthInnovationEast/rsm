@@ -15,10 +15,10 @@ def insert_stmnt(db: str) -> str:
     """Create insert statement for relevant db/schema.
 
     Args:
-        db (str) : The database/schema name to target.
+        db: The database/schema name to target.
 
     Returns:
-        str: Leading whitespace stripped SQL insert.
+        Leading whitespace stripped SQL insert.
     """
     stmnt = f"""
     insert into {db}.temp_whzan_monthly_data
@@ -32,10 +32,10 @@ def count_month_stmnt(db: str) -> str:
     """Create count distinct records for month statement for relevant db/schema.
 
     Args:
-        db (str): The database/schema name to target.
+        db: The database/schema name to target.
 
     Returns:
-        str: Leading whitespace stripped SQL insert.
+        Leading whitespace stripped SQL insert.
     """
     stmnt = f"""
     select count(*) as curr_rows
@@ -52,12 +52,12 @@ def get_month_count(cursor: MySQLCursor, query: str, month: str) -> int:
     """Execute and get the unique count of records for the month.
 
     Args:
-        cursor (MySQLCursor): Database cursor
-        query (str): query string
-        month (str): month, same as insert format
+        cursor: Database cursor.
+        query: query string.
+        month: month, same as insert format.
 
     Returns:
-        int: count of unique records for the specified month
+        Count of unique records for the specified month.
     """
     cursor.execute(query, {"month": month})
     count = cursor.fetchone()[0]
@@ -73,8 +73,8 @@ def upload(config: dict[str, Any], db_rows: list[list[Any]]):
     Approach is unusual as the target table has no unique constraints due to data issues.
 
     Args:
-        config (dict[str, Any]): Config loaded into dict.
-        db_rows (list[list[Any]]): Rows to be loaded.
+        config: Config loaded into dict.
+        db_rows: Rows to be loaded.
     """
     host = config["connection"]["host"]
     port = config["connection"]["port"]

@@ -2,6 +2,7 @@
 import logging
 import sys
 from functools import wraps
+from typing import Callable
 
 import click
 import rsm.constants as rsm_const
@@ -23,7 +24,7 @@ def _file_exists():
 optgroup_debug = OptionGroup("\nDebug options", help="Options specific to troubleshooting, testing")
 
 
-def debug_opts(f):
+def debug_opts(f: Callable):
     """Debug option declaration."""
 
     @optgroup_debug.option(
@@ -42,7 +43,7 @@ def debug_opts(f):
     return wrapper
 
 
-def parse_opts(f):
+def parse_opts(f: Callable):
     """Input option declaration."""
 
     @click.option(
@@ -66,7 +67,7 @@ def parse_opts(f):
     return wrapper
 
 
-def output_opts(f):
+def output_opts(f: Callable):
     """Output option declaration."""
 
     @optgroup_debug.option(
@@ -86,7 +87,7 @@ def output_opts(f):
 @click.group()
 @click.version_option(version())
 def cli():
-    """Click CLI response when no sub-command."""
+    """Please specify a subcommand."""
     pass
 
 

@@ -14,13 +14,13 @@ def merged_range_end(ws: Worksheet, row: int, col_start: int, col_max: int) -> i
     """Identify the end of a column merged cell.
 
     Args:
-        ws (Worksheet): The worksheet in use.
-        row (int): Row to process.
-        col_start (int): Column to start search.
-        col_max (int): Last column of worksheet (1-based)
+        ws: The worksheet in use.
+        row: Row to process.
+        col_start: Column to start search.
+        col_max: Last column of worksheet (1-based)
 
     Returns:
-        int: The last column index of the merge (1-based)
+        The last column index of the merge (1-based)
     """
     r_end = 0
     for i in range(col_start, col_max):
@@ -38,12 +38,12 @@ def ranges_in_row(ws: Worksheet, row: int, col_max: int) -> list[tuple[int, int]
     """Identify all merged cell ranges in row.
 
     Args:
-        ws (Worksheet): The worksheet in use.
-        row (int): Row to process.
-        col_max (int): Last column of worksheet (1-based)
+        ws: The worksheet in use.
+        row: Row to process.
+        col_max: Last column of worksheet (1-based)
 
     Returns:
-         list[Tuple[int, int]]: start/stop positions (1-based)
+         Sets of start/stop positions (1-based)
     """
     ranges = []
     for i in range(1, col_max):
@@ -61,12 +61,12 @@ def core_cols(conf: dict[str, Any], ws: Worksheet, core_stop: int) -> dict[str, 
     """Find core fields between first colunm and first merged range.
 
     Args:
-        conf (Dict[str,Any]): Config loaded into dict.
-        ws (Worksheet): The worksheet in use.
-        core_stop (int): Position of the first merged range (1-based)
+        conf: Config loaded into dict.
+        ws: The worksheet in use.
+        core_stop: Position of the first merged range (1-based)
 
     Returns:
-        Dict[str, int]: Field name to column position kvp.
+        Field name to column position kvp.
     """
     row = 2
     col_map = {}
@@ -91,13 +91,13 @@ def monthly_cols(
     """Extract the appropriate monthly column positions.
 
     Args:
-        conf (Dict[str,Any]): Config loaded into dict.
-        ws (Worksheet): The worksheet in use.
-        monthly_range (Tuple[int, int]): Column range to search
-        col_map (Dict[str, int]): Existing kvp to extend
+        conf: Config loaded into dict.
+        ws: The worksheet in use.
+        monthly_range: Column range to search
+        col_map : Existing kvp to extend
 
     Returns:
-        Dict[str, int]: Field name to column position kvp.
+        Field name to column position kvp.
     """
     row = 2
     monthly_set = conf["monthly_observations"]
@@ -119,14 +119,11 @@ def validate_xlsx(xlsx: str, conf: dict[str, Any]) -> tuple[Worksheet, datetime,
     """Check xlsx conforms to specification of config file.
 
     Args:
-        xlsx (str): Excel file to load.
-        conf (Dict[str,Any]): Config loaded into dict.
+        xlsx: Excel file to load.
+        conf: Config loaded into dict.
 
     Returns:
-        A tuple containing -
-            Worksheet: Worksheet to be used
-            datetime: The date field extracted based on config
-            dict[str, int]: Column name to position kvps.
+        Worksheet to be used; The date field extracted based on config; Column name to position kvps.
     """
     wb = load_workbook(filename=xlsx)
 
