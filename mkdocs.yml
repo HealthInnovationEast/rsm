@@ -1,10 +1,13 @@
-site_name: rsm - Remote Site Monitoring
+site_name: Remote Site Monitoring
 
 theme:
   name: "material"
+  features:
+    - search.highlight
 
 plugins:
-  - mkdocstrings
-
-nav:
-  - Home: index.md
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [src]
+- search

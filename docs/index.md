@@ -1,4 +1,6 @@
-# rsm - Remote Site Monitoring
+# Home
+
+More detail is available in the project `README.md`, this is purely for easy access to the code docs.
 
 ## Commands
 
@@ -14,11 +16,11 @@ Additional help is available for each subcommand via:
 rsm [subcommand] --help
 ```
 
-## Module reference
+## Reference
 
-- [rsm.constants](./rsm/constants.md)
-- [rsm.db](./rsm/db.md)
-- [rsm.excel](./rsm/excel.md)
-- [rsm.main](./rsm/main.md)
-- [rsm.ui](./rsm/ui.md)
-- [rsm.utils](./rsm/utils.md)
+<!-- need to render with mkdocs, see /README.md -->
+
+::: rsm
+options:
+show_submodules: true
+show_if_no_docstring: true
