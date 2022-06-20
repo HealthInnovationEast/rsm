@@ -8,7 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       # - name: Shutdown Ubuntu MySQL (SUDO)
       #   run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
       - uses: mirromutth/mysql-action@v1.1
@@ -22,6 +21,8 @@ jobs:
           mysql root password: ${{ secrets.MYSQL_ROOT }} # Required if "mysql user" is empty, default is empty. The root superuser password
           mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
           mysql password: ${{ secrets.MYSQL_USER }} # Required if "mysql user" exists. The password for the "mysql user"
+      # checkout after DB setup to minimise wasted time
+      - uses: actions/checkout@v2
       - name: Wait for MySQL
         run: |
           while ! mysqladmin ping --port 3306 --host=127.0.0.1 --password=${{ secrets.MYSQL_ROOT }} --silent; do
@@ -29,7 +30,7 @@ jobs:
           done
       - name: create-table
         run: |
-          mysql -u root -p ${{ secrets.MYSQL_ROOT }} -D unit_test -h 127.0.0.1 -P 3306 < tests/data/loader.ddl
+          mysql --user=root --password=${{ secrets.MYSQL_ROOT }} --port 3306 --host=127.0.0.1 --database=unit_test < tests/data/loader.ddl
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
