@@ -5,7 +5,6 @@ import re
 from datetime import datetime
 from typing import Any
 
-import rsm.db as rsm_db
 import rsm.excel as rsm_excel
 import yaml
 from openpyxl.worksheet.worksheet import Worksheet
@@ -105,4 +104,6 @@ def convert_to_db(input: str, config: str, output: str, loglevel: str):
         loglevel: see rsm.constants.LOG_LEVELS
     """
     yml_conf, db_rows = convert(input, config, output, loglevel)
+    import rsm.db as rsm_db
+
     rsm_db.upload(yml_conf, db_rows)
