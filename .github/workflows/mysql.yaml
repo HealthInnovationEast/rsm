@@ -24,7 +24,7 @@ jobs:
           mysql password: ${{ secrets.MYSQL_USER }} # Required if "mysql user" exists. The password for the "mysql user"
       - name: create-table
         run: |
-          mysql -u root -p ${{ secrets.MYSQL_ROOT }} unit_test < tests/data/loader.ddl
+          mysql -u root -p ${{ secrets.MYSQL_ROOT }} -D unit_test -h 127.0.0.1 < tests/data/loader.ddl
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
