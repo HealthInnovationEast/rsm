@@ -43,7 +43,7 @@ jobs:
       - name: Create config
         run: |
            grep -B 1000 -m 1 '^connection:$' src/rsm/resources/parser.cfg.yaml > tmp.cfg.yaml
-           echo '  host: "localhost"' >> tmp.cfg.yaml
+           echo '  host: "127.0.0.1"' >> tmp.cfg.yaml
            echo '  port: "3306"' >> tmp.cfg.yaml
            echo '  user: "developer"' >> tmp.cfg.yaml
            echo '  db: "unit_test"' >> tmp.cfg.yaml
