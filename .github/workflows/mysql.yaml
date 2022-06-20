@@ -19,8 +19,6 @@ jobs:
           mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
           mysql database: 'unit_test' # Optional, default value is "test". The specified database which will be create
           mysql root password: ${{ secrets.MYSQL_ROOT }} # Required if "mysql user" is empty, default is empty. The root superuser password
-          mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          mysql password: ${{ secrets.MYSQL_USER }} # Required if "mysql user" exists. The password for the "mysql user"
       # checkout after DB setup to minimise wasted time
       - uses: actions/checkout@v2
       - name: Wait for MySQL
@@ -39,15 +37,15 @@ jobs:
           python -m pip install --upgrade pip
       - name: Package installs
         run: |
-          pip install .[mysql,tests]
+          pip install .[mysql,tests,docs]
       - name: Create config
         run: |
            grep -B 1000 -m 1 '^connection:$' src/rsm/resources/parser.cfg.yaml > tmp.cfg.yaml
            echo '  host: "127.0.0.1"' >> tmp.cfg.yaml
            echo '  port: "3306"' >> tmp.cfg.yaml
-           echo '  user: "developer"' >> tmp.cfg.yaml
+           echo '  user: "root"' >> tmp.cfg.yaml
            echo '  db: "unit_test"' >> tmp.cfg.yaml
-           echo '  pw: "${{ secrets.MYSQL_USER }}"' >> tmp.cfg.yaml
+           echo '  pw: "${{ secrets.MYSQL_ROOT }}"' >> tmp.cfg.yaml
       - name: rsm to-db
         run: |
           rsm to-db -c tmp.cfg.yaml -i tests/data/Input_74cols.xlsx -o tmp.result.csv
