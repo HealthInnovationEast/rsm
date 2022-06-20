@@ -17,4 +17,4 @@ CREATE TABLE `temp_whzan_monthly_data` (
   `Stethoscope` text,
   `Clients_With_Readings` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-/
+;
