@@ -15,6 +15,9 @@ jobs:
     - name: Update pip
       run: |
         python -m pip install --upgrade pip
+    - name: Package install
+      run: |
+        pip install .[mysql]
     - name: Install mkdoc dependencies
       run: |
         pip install .[docs]
