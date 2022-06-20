@@ -14,6 +14,7 @@
 - [Configuration](#configuration)
 - [Development](#development)
   - [Initial setup](#initial-setup)
+  - [Testing](#testing)
   - [Code documentation](#code-documentation)
 
 ## Overview
@@ -122,16 +123,25 @@ pip install --editable .[mysql]
 pip install --editable .
 ```
 
+### Testing
+
+Basic input/output tests are in place.  To execute with coverage reports:
+
+```bash
+# !!! Assumes venv is active !!!
+# first time:
+pip install --editable .[tests]
+pytest . -x --no-cov-on-fail --cov=rsm --cov-report term --cov-report html --junitxml=junit.xml
+```
+
 ### Code documentation
 
 Browsable code documentation can be viewed locally via:
 
 ```bash
 # !!! Assumes venv is active !!!
+# first time
 pip install --editable .[docs]
-# windows
-mkdocs.exe serve
-# unix
 mkdocs serve
 ```
 
