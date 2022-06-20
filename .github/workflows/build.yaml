@@ -13,6 +13,7 @@ jobs:
         collation server: 'utf8_general_ci'
         mysql version: '8.0'
         mysql root password: ${{ secrets.MYSQL_ROOT }}
+        mysql database: 'integration_test'
     # checkout after DB setup to minimise wasted time
     - uses: actions/checkout@v2
     - name: Set up Python 3.10
@@ -34,7 +35,7 @@ jobs:
         echo '  host: "127.0.0.1"' >> tmp.cfg.yaml
         echo '  port: "3306"' >> tmp.cfg.yaml
         echo '  user: "root"' >> tmp.cfg.yaml
-        echo '  db: "test"' >> tmp.cfg.yaml
+        echo '  db: "integration_test"' >> tmp.cfg.yaml
         echo '  pw: "${{ secrets.MYSQL_ROOT }}"' >> tmp.cfg.yaml
     - name: Check DB ready
       run: |
@@ -43,7 +44,7 @@ jobs:
         done
     - name: Setup table
       run: |
-        mysql --user=root --password=${{ secrets.MYSQL_ROOT }} --port 3306 --host=127.0.0.1 --database=test < tests/data/loader.ddl
+        mysql --user=root --password=${{ secrets.MYSQL_ROOT }} --port 3306 --host=127.0.0.1 --database=integration_test < tests/data/loader.ddl
     - name: Run test DB load
       run: |
         rsm to-db -c tmp.cfg.yaml -i tests/data/Input_74cols.xlsx -o tmp.result.csv
