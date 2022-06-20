@@ -1,4 +1,4 @@
-name: pytest-coverage-commentator
+name: full build
 on:
   pull_request:
     branches:
@@ -9,11 +9,10 @@ jobs:
     steps:
     - uses: mirromutth/mysql-action@v1.1
       with:
-        character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-        collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-        mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-        mysql database: 'unit_test' # Optional, default value is "test". The specified database which will be create
-        mysql root password: ${{ secrets.MYSQL_ROOT }} # Required if "mysql user" is empty, default is empty. The root superuser password
+        character set server: 'utf8'
+        collation server: 'utf8_general_ci'
+        mysql version: '8.0'
+        mysql root password: ${{ secrets.MYSQL_ROOT }}
     # checkout after DB setup to minimise wasted time
     - uses: actions/checkout@v2
     - name: Set up Python 3.10
@@ -29,18 +28,22 @@ jobs:
     - name: Mkdocs build
       run: |
         mkdocs build -d doc-build
-    - name: Create config, check DB ready, add table
+    - name: Create config
       run: |
         grep -B 1000 -m 1 '^connection:$' src/rsm/resources/parser.cfg.yaml > tmp.cfg.yaml
         echo '  host: "127.0.0.1"' >> tmp.cfg.yaml
         echo '  port: "3306"' >> tmp.cfg.yaml
         echo '  user: "root"' >> tmp.cfg.yaml
-        echo '  db: "unit_test"' >> tmp.cfg.yaml
+        echo '  db: "test"' >> tmp.cfg.yaml
         echo '  pw: "${{ secrets.MYSQL_ROOT }}"' >> tmp.cfg.yaml
+    - name: Check DB ready
+      run: |
         while ! mysqladmin ping --port 3306 --host=127.0.0.1 --password=${{ secrets.MYSQL_ROOT }} --silent; do
           sleep 1
         done
-        mysql --user=root --password=${{ secrets.MYSQL_ROOT }} --port 3306 --host=127.0.0.1 --database=unit_test < tests/data/loader.ddl
+    - name: Setup table
+      run: |
+        mysql --user=root --password=${{ secrets.MYSQL_ROOT }} --port 3306 --host=127.0.0.1 --database=test < tests/data/loader.ddl
     - name: Run test DB load
       run: |
         rsm to-db -c tmp.cfg.yaml -i tests/data/Input_74cols.xlsx -o tmp.result.csv
