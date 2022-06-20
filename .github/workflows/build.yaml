@@ -17,7 +17,7 @@ jobs:
         python -m pip install --upgrade pip
     - name: Package install
       run: |
-        pip install .[mysql]
+        pip install .
     - name: Install mkdoc dependencies
       run: |
         pip install .[docs]
@@ -29,7 +29,6 @@ jobs:
         pip install .[tests]
     - name: Tests and coverage file
       run: |
-        pytest --cache-clear --cov=rsm .
-    #      > pytest-coverage.txt
-    # - name: Comment coverage
-    #   uses: coroo/pytest-coverage-commentator@v1.0.2
+        pytest --cache-clear --cov=rsm . > pytest-coverage.txt
+    - name: Comment coverage
+      uses: coroo/pytest-coverage-commentator@v1.0.2
