@@ -18,10 +18,13 @@ jobs:
           character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
           collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
           mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-          mysql database: 'some_test' # Optional, default value is "test". The specified database which will be create
+          mysql database: 'unit_test' # Optional, default value is "test". The specified database which will be create
           mysql root password: ${{ secrets.MYSQL_ROOT }} # Required if "mysql user" is empty, default is empty. The root superuser password
           mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
           mysql password: ${{ secrets.MYSQL_USER }} # Required if "mysql user" exists. The password for the "mysql user"
+      - create-table:
+        run: |
+          mysql -u root -p ${{ secrets.MYSQL_ROOT }} unit_test < tests/data/loader.ddl
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
@@ -31,6 +34,17 @@ jobs:
       - name: Package installs
         run: |
           pip install .[mysql,tests]
-      - name: Tests and coverage file
+      - name: Create config
         run: |
-          pytest --cache-clear --cov=rsm . > pytest-coverage.txt
+           grep -B 1000 -m 1 '^connection:$' src/rsm/resources/parser.cfg.yaml > tmp.cfg.yaml
+           echo '  host: "localhost"' >> tmp.cfg.yaml
+           echo '  port: "3800"' >> tmp.cfg.yaml
+           echo '  user: "developer"' >> tmp.cfg.yaml
+           echo '  db: "unit_test"' >> tmp.cfg.yaml
+           echo '  pw: "${{ secrets.MYSQL_USER }}"' >> tmp.cfg.yaml
+      - name: rsm to-db
+        run: |
+          rsm to-db -c tmp.cfg.yaml -i tests/data/Input_74cols.xlsx -o tmp.result.csv
+      # - name: Tests and coverage file
+      #   run: |
+      #     pytest --cache-clear --cov=rsm . > pytest-coverage.txt

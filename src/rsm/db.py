@@ -80,12 +80,17 @@ def upload(config: dict[str, Any], db_rows: list[list[Any]]):
     port = config["connection"]["port"]
     db = config["connection"]["db"]
     user = config["connection"]["user"]
-    logging.info("")
-    logging.info("About to connect to:")
-    logging.info(f"\t{host}:{port}")
-    logging.info(f"\tDB={db}, User={user}")
-    logging.info("")
-    pwd = getpass.getpass(prompt=">>>>> Please enter password for above DB: ", stream=None)
+
+    if "pw" in config["connection"]:
+        pw = config["connection"]["pw"]
+        logging.warn("Password exposed in plain text, only for unit-testing.")
+    else:
+        logging.info("")
+        logging.info("About to connect to:")
+        logging.info(f"\t{host}:{port}")
+        logging.info(f"\tDB={db}, User={user}")
+        logging.info("")
+        pwd = getpass.getpass(prompt=">>>>> Please enter password for above DB: ", stream=None)
 
     sql_insert = insert_stmnt(db)
     sql_count = count_month_stmnt(db)
