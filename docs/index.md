@@ -21,6 +21,6 @@ rsm [subcommand] --help
 <!-- need to render with mkdocs, see /README.md -->
 
 ::: rsm
-options:
-show_submodules: true
-show_if_no_docstring: true
+    options:
+        show_submodules: true
+        show_if_no_docstring: true
