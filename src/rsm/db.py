@@ -82,7 +82,7 @@ def upload(config: dict[str, Any], db_rows: list[list[Any]]):
     user = config["connection"]["user"]
 
     if "pw" in config["connection"]:
-        pw = config["connection"]["pw"]
+        pwd = config["connection"]["pw"]
         logging.warn("Password exposed in plain text, only for unit-testing.")
     else:
         logging.info("")
