@@ -26,6 +26,7 @@ jobs:
         pip install .[tests]
     - name: Tests and coverage file
       run: |
-        pytest --cache-clear --cov=rsm . > pytest-coverage.txt
-    - name: Comment coverage
-      uses: coroo/pytest-coverage-commentator@v1.0.2
+        pytest --cache-clear --cov=rsm .
+    #      > pytest-coverage.txt
+    # - name: Comment coverage
+    #   uses: coroo/pytest-coverage-commentator@v1.0.2
