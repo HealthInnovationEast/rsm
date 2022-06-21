@@ -50,6 +50,6 @@ jobs:
         rsm to-db -c tmp.cfg.yaml -i tests/data/Input_74cols.xlsx -o tmp.result.csv
     - name: Tests and coverage file
       run: |
-        pytest --cache-clear --cov=rsm . > pytest-coverage.txt
+        pytest > pytest-coverage.txt
     - name: Comment coverage
       uses: coroo/pytest-coverage-commentator@v1.0.2
