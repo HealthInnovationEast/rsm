@@ -6,10 +6,10 @@ build-backend = "setuptools.build_meta"
 addopts  = "--cache-clear --cov rsm"
 
 [tool.coverage.run]
-branch = true
+# branch = true
 source = ["rsm"]
 omit = ["*/db.py", "*/constants.py", "*/ui.py"]
 
-[tool.coverage.report]
-fail_under = 80
-precision = 2
+# [tool.coverage.report]
+# fail_under = 80
+# precision = 2
