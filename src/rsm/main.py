@@ -1,13 +1,10 @@
+"""Entry points after CLI capture."""
 import logging
 import os
 import re
 from datetime import datetime
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Tuple
 
-import rsm.db as rsm_db
 import rsm.excel as rsm_excel
 import yaml
 from openpyxl.worksheet.worksheet import Worksheet
@@ -17,18 +14,31 @@ from rsm.utils import parser_cfg
 
 
 def template_config(loglevel):
-    """
-    Dumps example yaml config file to stdout
+    """Dump default yaml config file to stdout.
+
+    Args:
+        loglevel (str): see rsm.constants.LOG_LEVELS
     """
     log_setup(loglevel)
     print(parser_cfg(None))
 
 
-def validate(input, config, loglevel) -> Tuple[Dict[str, Any], Worksheet, datetime, Dict[str, int]]:
+def validate(input, config, loglevel) -> tuple[dict[str, Any], Worksheet, datetime, dict[str, int]]:
+    """Validate input xlsx against config.
+
+    Args:
+        input    (str) : Path to Input xlsx file
+        config   (str) : Path to config (None accepted)
+        loglevel (str) : see rsm.constants.LOG_LEVELS
+
+    Returns:
+        Config loaded into dict; Worksheet to process; Date to record data against; Column mappings kvp.
+    """
     log_setup(loglevel)
     input = os.path.abspath(input)
-    config = os.path.abspath(config)
-    logging.debug(f"Reading yaml file: {config}")
+    if config:
+        config = os.path.abspath(config)
+        logging.debug(f"Reading yaml file: {config}")
     str_config = parser_cfg(config)
     logging.debug(f"Loading yaml to object")
     yml_conf = yaml.safe_load(str_config)
@@ -38,13 +48,25 @@ def validate(input, config, loglevel) -> Tuple[Dict[str, Any], Worksheet, dateti
     return (yml_conf, ws, monthly_dt, col_map)
 
 
-def convert(input: str, config: str, output: str, loglevel: str) -> Tuple[Dict[str, Any], List[List[Any]]]:
+def convert(input: str, config: str, output: str, loglevel: str) -> tuple[dict[str, Any], list[list[Any]]]:
+    """Convert xlsx to csv format as described by config.
+
+    Args:
+        input: Path to Input xlsx file
+        config: Path to config (None accepted)
+        output: Path to output csv (None accepted)
+        loglevel: see rsm.constants.LOG_LEVELS
+
+    Returns:
+        Config loaded into dict; Data rows.
+    """
+    yml_conf, ws, monthly_dt, col_map = validate(input, config, loglevel)
+
     if output is None:
         output = re.sub(".xlsx$", ".csv", input)
-    input = os.path.abspath(input)
-    config = os.path.abspath(config)
-    output = os.path.abspath(output)
-    yml_conf, ws, monthly_dt, col_map = validate(input, config, loglevel)
+    else:
+        output = os.path.abspath(output)
+
     output_order = yml_conf["output_order"]
     data_store = []  # datastore has no header
     # -sig is to force the BOM (Byte Order Marker) at the start of the file
@@ -73,5 +95,15 @@ def convert(input: str, config: str, output: str, loglevel: str) -> Tuple[Dict[s
 
 
 def convert_to_db(input: str, config: str, output: str, loglevel: str):
+    """Convert xlsx to csv format and upload to database.
+
+    Args:
+        input: Path to Input xlsx file
+        config: Path to config (None accepted)
+        output: Path to output csv (None accepted)
+        loglevel: see rsm.constants.LOG_LEVELS
+    """
     yml_conf, db_rows = convert(input, config, output, loglevel)
+    import rsm.db as rsm_db
+
     rsm_db.upload(yml_conf, db_rows)

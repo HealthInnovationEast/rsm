@@ -1,6 +1,8 @@
+"""CLI interface."""
 import logging
 import sys
 from functools import wraps
+from typing import Callable
 
 import click
 import rsm.constants as rsm_const
@@ -22,7 +24,9 @@ def _file_exists():
 optgroup_debug = OptionGroup("\nDebug options", help="Options specific to troubleshooting, testing")
 
 
-def debug_opts(f):
+def debug_opts(f: Callable):
+    """Debug option declaration."""
+
     @optgroup_debug.option(
         "-l",
         "--loglevel",
@@ -39,7 +43,9 @@ def debug_opts(f):
     return wrapper
 
 
-def parse_opts(f):
+def parse_opts(f: Callable):
+    """Input option declaration."""
+
     @click.option(
         "-i",
         "--input",
@@ -61,7 +67,9 @@ def parse_opts(f):
     return wrapper
 
 
-def output_opts(f):
+def output_opts(f: Callable):
+    """Output option declaration."""
+
     @optgroup_debug.option(
         "-o",
         "--output",
@@ -79,6 +87,7 @@ def output_opts(f):
 @click.group()
 @click.version_option(version())
 def cli():
+    """Please specify a subcommand."""
     pass
 
 
@@ -86,9 +95,7 @@ def cli():
 @parse_opts
 @debug_opts
 def validate_xlsx(*args, **kwargs):
-    """
-    Validate the provided xlsx file vs yaml config.
-    """
+    """Validate the provided xlsx file vs yaml config."""
     rsm_main.validate(*args, **kwargs)
 
 
@@ -97,9 +104,7 @@ def validate_xlsx(*args, **kwargs):
 @output_opts
 @debug_opts
 def to_csv(*args, **kwargs):
-    """
-    Convert the provided xlsx file to csv using the yaml config.
-    """
+    """Convert the provided xlsx file to csv using the yaml config."""
     rsm_main.convert(*args, **kwargs)
 
 
@@ -108,8 +113,7 @@ def to_csv(*args, **kwargs):
 @output_opts
 @debug_opts
 def to_db(*args, **kwargs):
-    """
-    Convert the provided xlsx file to csv and load into database.
+    """Convert the provided xlsx file to csv and load into database.
 
     Requires "connection" section of `parser.cfg.yaml` to be completed, password will be requested interactively.
     """
@@ -119,7 +123,5 @@ def to_db(*args, **kwargs):
 @cli.command()
 @debug_opts
 def template_config(*args, **kwargs):
-    """
-    Dumps example yaml config file to stdout
-    """
+    """Dump example yaml config file to stdout."""
     rsm_main.template_config(*args, **kwargs)

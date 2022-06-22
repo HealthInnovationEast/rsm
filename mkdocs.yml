@@ -1,0 +1,13 @@
+site_name: Remote Site Monitoring
+
+theme:
+  name: "material"
+  features:
+    - search.highlight
+
+plugins:
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [src]
+- search
