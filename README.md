@@ -1,8 +1,13 @@
 # Remote site monitoring <!-- omit in toc -->
 
-**This package is highly unlikely to be of use outside of Eastern AHSN.**
-
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+
+| Branch | GitHub Action Status |
+| :------: | ------ |
+| main | ![pre-commit][pre-commit-main] ![build][build-main] |
+| develop | ![pre-commit][pre-commit-develop] ![build][build-develop] |
+
+**This package is highly unlikely to be of use outside of Eastern AHSN.**
 
 - [Overview](#overview)
 - [Commands](#commands)
@@ -150,3 +155,8 @@ The documentation is automatically rendered from the doc strings in code.
 If a new file is added to `src/` please add a corresponding `docs/rsm/*.md`.
 
 <!-- refs -->
+
+[build-develop]: https://github.com/cynapse-ccri/rsm/actions/workflows/build.yaml/badge.svg?branch=develop
+[build-main]: https://github.com/cynapse-ccri/rsm/actions/workflows/build.yaml/badge.svg?branch=main
+[pre-commit-develop]: https://github.com/cynapse-ccri/rsm/actions/workflows/pre-commit.yaml/badge.svg?branch=develop
+[pre-commit-main]: https://github.com/cynapse-ccri/rsm/actions/workflows/pre-commit.yaml/badge.svg?branch=main
