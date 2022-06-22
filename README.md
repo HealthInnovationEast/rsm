@@ -2,9 +2,9 @@
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-| Branch | GitHub Action Status |
-| :------: | ------ |
-| main | ![pre-commit][pre-commit-main] ![build][build-main] |
+| Branch  |                   GitHub Action Status                    |
+| :-----: | :-------------------------------------------------------: |
+|  main   |    ![pre-commit][pre-commit-main] ![build][build-main]    |
 | develop | ![pre-commit][pre-commit-develop] ![build][build-develop] |
 
 **This package is highly unlikely to be of use outside of Eastern AHSN.**
