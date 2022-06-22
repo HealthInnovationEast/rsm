@@ -18,6 +18,7 @@
     - [Direct load to mysql](#direct-load-to-mysql)
 - [Configuration](#configuration)
 - [Development](#development)
+  - [hub-flow](#hub-flow)
   - [Initial setup](#initial-setup)
   - [Testing](#testing)
   - [Code documentation](#code-documentation)
@@ -114,6 +115,11 @@ Please run `rsm template-config` to get the full config file.
 
 If on Windows we're assuming use of the bash command line provided by git install.
 
+### hub-flow
+
+Please follow the [git-flow] process for branching and releases.  As part of this please use the [hub-flow]
+tools to manage your workspace.  These install correctly under Windows when using the git-bash extensions.
+
 ### Initial setup
 
 Adds the virtual env and installs package in dev mode:
@@ -158,5 +164,7 @@ If a new file is added to `src/` please add a corresponding `docs/rsm/*.md`.
 
 [build-develop]: https://github.com/cynapse-ccri/rsm/actions/workflows/build.yaml/badge.svg?branch=develop
 [build-main]: https://github.com/cynapse-ccri/rsm/actions/workflows/build.yaml/badge.svg?branch=main
+[git-flow]: https://datasift.github.io/gitflow/IntroducingGitFlow.html
+[hub-flow]: https://datasift.github.io/gitflow/TheHubFlowTools.html
 [pre-commit-develop]: https://github.com/cynapse-ccri/rsm/actions/workflows/pre-commit.yaml/badge.svg?branch=develop
 [pre-commit-main]: https://github.com/cynapse-ccri/rsm/actions/workflows/pre-commit.yaml/badge.svg?branch=main
