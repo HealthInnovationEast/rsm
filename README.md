@@ -1,19 +1,27 @@
 # Remote site monitoring <!-- omit in toc -->
 
-**This package is highly unlikely to be of use outside of Eastern AHSN.**
-
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
+| Branch  |                   GitHub Action Status                    |
+| :-----: | :-------------------------------------------------------: |
+|  main   |    ![pre-commit][pre-commit-main] ![build][build-main]    |
+| develop | ![pre-commit][pre-commit-develop] ![build][build-develop] |
+
+**This package is highly unlikely to be of use outside of Eastern AHSN.**
+
 - [Overview](#overview)
-  - [The problem](#the-problem)
+- [Commands](#commands)
+- [The use-case](#the-use-case)
   - [Approach](#approach)
     - [Validation](#validation)
     - [CSV mode](#csv-mode)
     - [Direct load to mysql](#direct-load-to-mysql)
 - [Configuration](#configuration)
 - [Development](#development)
+  - [hub-flow](#hub-flow)
   - [Initial setup](#initial-setup)
-    - [MySQL extras](#mysql-extras)
+  - [Testing](#testing)
+  - [Code documentation](#code-documentation)
 
 ## Overview
 
@@ -24,7 +32,28 @@ This tool provides the following functionality:
    - manual sql load to warehouse
    - transactional load to warehouse
 
-### The problem
+## Commands
+
+This project uses sub commands, to list the available commands execute:
+
+```console
+rsm --help
+```
+
+Additional help is available for each subcommand via:
+
+```console
+rsm [subcommand] --help
+```
+
+The most useful commands are:
+
+- `rsm template-config` - Dump example yaml config file to stdout.
+  - The only needs modification when using `rsm to-db`
+- `rsm to-csv` - Generate the processed CSV file.
+- `rsm to-db` - Directly load into database, generates CSV for records.
+
+## The use-case
 
 Input data arrives in the form of 2 `xlsx` spreadsheets, there are 2 problem with these:
 
@@ -68,9 +97,11 @@ Generate csv vesion of file columns ordered as described in `parser.cfg.yaml`
 
 Date to be formatted as `{month.title()}-{year.2digit}`, do as part of writer.
 
+The generated CSV file can be used with the manual load process.
+
 #### Direct load to mysql
 
-Date format is different, just a minor transform required.
+Date format is different, to remove need for additional updates after load.
 
 ## Configuration
 
@@ -82,7 +113,12 @@ Please run `rsm template-config` to get the full config file.
 
 ## Development
 
-Assuming using bash command line provided by git install.
+If on Windows we're assuming use of the bash command line provided by git install.
+
+### hub-flow
+
+Please follow the [git-flow] process for branching and releases.  As part of this please use the [hub-flow]
+tools to manage your workspace.  These install correctly under Windows when using the git-bash extensions.
 
 ### Initial setup
 
@@ -92,20 +128,43 @@ Adds the virtual env and installs package in dev mode:
 cd ## your-checkout ##
 python -m venv .venv
 . .venv/Scripts/activate
+pip install --editable .[mysql]
+# if you want don't want to use direct mysql loading
+# install without the mysql module (mainly for if there are issues)
 pip install --editable .
-# if you want mysql see MySQL extras section below
-pip install --editable .[with_mysql]
 ```
 
-#### MySQL extras
+### Testing
 
-If you want to use direct load to MySQL, install:
+Basic input/output tests are in place.  To execute with coverage reports:
 
-- Visual Studio Build Tools
-  - just those, not everything
-- MariaDB Connector for MySQL
-  - `export MYSQLCLIENT_CONNECTOR=/c/Program\ Files/MariaDB/MariaDB\ Connector\ C\ 64-bit`
-- Install the additional python package
-  - `pip install mysqlclient`
+```bash
+# !!! Assumes venv is active !!!
+# first time:
+pip install --editable .[tests]
+pytest . -x --no-cov-on-fail --cov=rsm --cov-report term --cov-report html --junitxml=junit.xml
+```
+
+### Code documentation
+
+Browsable code documentation can be viewed locally via:
+
+```bash
+# !!! Assumes venv is active !!!
+# first time
+pip install --editable .[docs]
+mkdocs serve
+```
+
+The documentation is automatically rendered from the doc strings in code.
+
+If a new file is added to `src/` please add a corresponding `docs/rsm/*.md`.
 
 <!-- refs -->
+
+[build-develop]: https://github.com/cynapse-ccri/rsm/actions/workflows/build.yaml/badge.svg?branch=develop
+[build-main]: https://github.com/cynapse-ccri/rsm/actions/workflows/build.yaml/badge.svg?branch=main
+[git-flow]: https://datasift.github.io/gitflow/IntroducingGitFlow.html
+[hub-flow]: https://datasift.github.io/gitflow/TheHubFlowTools.html
+[pre-commit-develop]: https://github.com/cynapse-ccri/rsm/actions/workflows/pre-commit.yaml/badge.svg?branch=develop
+[pre-commit-main]: https://github.com/cynapse-ccri/rsm/actions/workflows/pre-commit.yaml/badge.svg?branch=main

@@ -3,3 +3,6 @@ build/
 tmp/
 **.egg-info
 **/__pycache__
+htmlcov/
+.coverage
+junit.xml

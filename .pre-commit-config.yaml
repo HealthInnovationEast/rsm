@@ -1,3 +1,4 @@
+exclude: docs/
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
@@ -48,3 +49,9 @@ repos:
     rev: v3.1.0
     hooks:
     -   id: reorder-python-imports
+-   repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.1.1
+    hooks:
+    -   id: pydocstyle
+        types: [python]
+        exclude: ^(setup.py|.+__init__.py|tests/)
