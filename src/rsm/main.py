@@ -77,10 +77,19 @@ def convert(input: str, config: str, output: str, loglevel: str) -> tuple[dict[s
             if ws.cell(r, 1).value == "TOTALS":
                 break
             row = [fmt_date(yml_conf["monthly_observation_sets"]["transform_csv"], monthly_dt)]
+            caseload = ws.cell(r, col_map["Caseload"]).value
             for col in output_order:
                 if col == "activity_month":
                     continue
-                val = ws.cell(r, col_map[col]).value
+                val = None
+                if col in yml_conf["merge"]:
+                    val = 0
+                    for key in yml_conf["merge"][col]:
+                        val += ws.cell(r, col_map[key]).value
+                    if val > 0:
+                        logging.warn(f"Merged values to create '{col}' column for caseload '{caseload}': {val}")
+                else:
+                    val = ws.cell(r, col_map[col]).value
                 if val is None:
                     val = ""
                 row.append(str(val))
