@@ -16,8 +16,7 @@ EXPECTED = os.path.join(DATA_DIR, "Expected.csv")
 @pytest.mark.parametrize(
     "input",
     [
-        (os.path.join(DATA_DIR, "Input_71cols.xlsx")),
-        (os.path.join(DATA_DIR, "Input_74cols.xlsx")),
+        (os.path.join(DATA_DIR, "Input_78cols.xlsx")),
     ],
 )
 def test_01_valid_inputs(input):
@@ -28,8 +27,7 @@ def test_01_valid_inputs(input):
 @pytest.mark.parametrize(
     "input, expected",
     [
-        (os.path.join(DATA_DIR, "Input_71cols.xlsx"), EXPECTED),
-        (os.path.join(DATA_DIR, "Input_74cols.xlsx"), EXPECTED),
+        (os.path.join(DATA_DIR, "Input_78cols.xlsx"), EXPECTED),
     ],
 )
 def test_02_result(input, expected):

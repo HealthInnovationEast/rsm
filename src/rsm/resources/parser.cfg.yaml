@@ -22,7 +22,8 @@ monthly_observations:
   O2: O2
   Temp: Temp
   NEWS: NEWS
-  NEWS2 (0-4): NEWS2(0-4)
+  NEWS2 (0): NEWS2(0)
+  NEWS2 (1-4): NEWS2(1-4)
   NEWS2 (5-6): NEWS2(5-6)
   NEWS2 (7+): NEWS2(7+)
   NEWS2 (Total): NEWS2
@@ -30,6 +31,10 @@ monthly_observations:
   ECG: ECG
   Stetho scope: Stethoscope
   Clients w/ Readings: Clients_with_Readings
+merge:
+  NEWS2(0-4):
+  - NEWS2(0)
+  - NEWS2(1-4)
 output_order:
   - activity_month
   - Caseload
