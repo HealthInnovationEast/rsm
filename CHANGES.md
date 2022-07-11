@@ -2,6 +2,10 @@
 
 New items at top
 
+## 2022.07.01
+
+- Missed update to full build action input file for DB load test.
+
 ## 2022.07
 
 - Switched to year.month version as looks likely file format will need to bre regularly updated.
